@@ -7,7 +7,7 @@ jobs:
 
     steps:
       - name: Setup Environment
-        uses: ../.github/actions/setup_environment
+        uses: actions/setup_environment
 
       - name: Execute Makefile Static Tests 
         # this works without .venv because the Makefile modifies the path to use the venv - see Makefile line 4
