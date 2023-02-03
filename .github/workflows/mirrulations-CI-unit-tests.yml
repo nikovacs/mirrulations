@@ -6,27 +6,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2 # Checkout the repository content to github runner.
-
-      - name: Setup Python Version
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9 # Install the python version needed
-
-      - name: Create Virtual Environment and installing mirrulations components as modules
-        run: |
-          python -m pip install --upgrade pip
-          python3 -m venv .venv
-          pwd
-          .venv/bin/pip install -e mirrulations-client
-          .venv/bin/pip install -e mirrulations-core
-          .venv/bin/pip install -e mirrulations-dashboard
-          .venv/bin/pip install -e mirrulations-mocks
-          .venv/bin/pip install -e mirrulations-work-generator
-          .venv/bin/pip install -e mirrulations-work-server
+      - name: Setup Environment
+        uses: ./.github/actions/setup_environment
 
       - name: Execute Makefile Unit Tests 
-      # this works without .venv because the Makefile modifies the path to use the venv - see Makefile line 4
+        # this works without .venv because the Makefile modifies the path to use the venv - see Makefile line 4
         run: make test
 
