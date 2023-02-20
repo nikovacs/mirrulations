@@ -6,6 +6,7 @@ from base64 import b64encode
 from json import dumps, loads
 import requests
 from dotenv import load_dotenv
+import redis
 
 
 class NoJobsAvailableException(Exception):
@@ -128,10 +129,25 @@ class Client:
     def __init__(self):
         self.api_key = os.getenv('API_KEY')
         self.client_id = os.getenv('ID')
+        self.redis = Client.connect_to_redis()
 
         hostname = os.getenv('WORK_SERVER_HOSTNAME')
         port = os.getenv('WORK_SERVER_PORT')
         self.url = f'http://{hostname}:{port}'
+
+    @staticmethod
+    def connect_to_redis():
+        """
+        Connects to redis and returns the redis object.
+        Needed to write to disk from client.
+
+        Returns
+        -------
+        redis.Redis
+        """
+        r = redis.Redis('redis')
+        r.keys('*')
+        return r
 
     def get_job(self):
         """
